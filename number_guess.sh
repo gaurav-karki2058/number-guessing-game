@@ -47,7 +47,15 @@ GUESS_GAME(){
       GUESS_GAME "It's higher than that, guess again:"
     else
       ((GUESS_COUNT++))
+      ((TOTAL_GAMES_PLAYED++))
+
+      if (( $GUESS_COUNT>$USER_BEST_GAME ))
+      then
+      USER_BEST_GAME=$GUESS_COUNT
+      fi
+
       echo "You guessed it in $GUESS_COUNT tries. The secret number was $SECRET_NUMBER. Nice job!"
+      UPDATE_USER_RECORD=$($PSQL"update users set games_played=$TOTAL_GAMES_PLAYED,best_game=$USER_BEST_GAME where username='$USERNAME'")
     fi
   else
     echo "That is not an integer, guess again:"
